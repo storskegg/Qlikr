@@ -6,8 +6,10 @@ I write Go, Javascript, Ruby and sometimes Perl. This is my first attempt at Pyt
 
 Also, the `requirements.txt` file? I just wouldn't pay much attention to that yet. Still figuring that out.
 
+Also also, I have some hardcoded paths in the code.
+
 ## TL;DR
-This project is an over-engineered solution to replacing the garage door clicker to our 40-yr old garage door (no replacement clickers to be had, do not want to replace the garage door opener, because it still works, because it's 40yrs old).
+This project is an over-engineered solution to replacing the garage door clicker to our 40-yr old garage door opener (no replacement clickers to be had, do not want to replace the garage door opener, because it still works, because it's 40yrs old).
 
 ## Moar Description
 The project consists of 2+ units based on raspberry pi's: 
