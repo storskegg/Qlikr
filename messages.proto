@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package main;
+
+message GrageDoorMessage {
+    string id = 1;
+    uint64 ts = 2;
+    bytes nonce = 3;
+    bytes mac = 4;
+    uint32 channel = 5;
+    bytes nmea = 6;
+    enum MessageType {
+        OPEN = 0;
+        RECVD = 1;
+        ACCEPTED_OPENING = 10;
+        ACCEPTED_CLOSING = 11;
+        DENIED_UNAUTH = 20;
+        DENIED_OOB_TIME = 21;
+        DENIED_OOB_GEOFENCE = 29;
+    }
+    MessageType type = 10;
+}
+
+message OLEDDisplay {
+    bool clear = 1;
+    string line1 = 2;
+    string line2 = 3;
+    string line3 = 4;
+}
