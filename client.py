@@ -47,6 +47,7 @@ SECRET = bytes(os.getenv('QLIKR_SECRET'), 'utf-8')
 #꧁
 PREAMBLE = bytes(os.getenv('QLIKR_PREAMBLE'), "utf-8")
 CHANNEL = int(os.getenv('QLIKR_CHANNEL'))
+ALLOWABLE_TIME_ERROR = int(os.getenv('QLIKR_ALLOWED_TIME_ERROR'))
 
 ENV_REMOTE = 'remote'
 ENV_BASE = 'server'
@@ -241,7 +242,7 @@ def handle_packet_remote(recv_msg):
 def handle_packet_server(recv_msg):
     if recv_msg.type == messages_pb2.GrageDoorMessage.OPEN:
         # TODO: TS check here
-        if recv_msg.ts > int(time.time()) + 2:
+        if recv_msg.ts > int(time.time()) + ALLOWABLE_TIME_ERROR:
             logger.warning("Packet failed time verification")
             ts_oob_msg = messages_pb2.GrageDoorMessage()
             ts_oob_msg.id = ID
