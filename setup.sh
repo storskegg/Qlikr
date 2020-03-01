@@ -3,6 +3,8 @@
 # Update Pi and Python
 sudo apt-get update && sudo apt-get dist-upgrade
 
+sudo apt-get install python3-pip
+
 sudo pip3 install --upgrade setuptools
 
 ls /dev/i2c* /dev/spi*
