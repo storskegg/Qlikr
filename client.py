@@ -118,6 +118,17 @@ display = adafruit_ssd1306.SSD1306_I2C(128, 32, i2c, reset=reset_pin)
 # Clear the display.
 display.fill(0)
 display.show()
+display.fill(1)
+display.show()
+time.sleep(.3)
+display.fill(0)
+display.show()
+time.sleep(.3)
+display.fill(1)
+display.show()
+time.sleep(.3)
+display.fill(0)
+display.show()
 
 # Create blank image for drawing
 # Make sure to create image with mode '1' for 1-bit color.
