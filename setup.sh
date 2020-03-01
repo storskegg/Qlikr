@@ -1,5 +1,9 @@
 #!/bin/sh
 
+mkdir /home/pi/log
+mkdir /home/pi/1/raw
+mkdir /home/pi/tmp
+
 # Update Pi and Python
 sudo apt-get update && sudo apt-get dist-upgrade -y
 
@@ -20,5 +24,12 @@ sudo pip3 install -U python-dotenv python-daemon
 
 # Pimoroni libs
 curl https://get.pimoroni.com/automationhat | bash
+
+# Install UUGear libs
+wget https://project-downloads.drogon.net/wiringpi-latest.deb
+
+sudo dpkg -i wiringpi-latest.deb
+wget http://www.uugear.com/repo/Zero2GoOmini/installZero2Go.sh
+sudo sh installZero2Go.sh
 
 # sudo pip3 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 sudo pip3 install -U
