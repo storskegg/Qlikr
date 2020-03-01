@@ -1,9 +1,9 @@
 #!/bin/sh
 
 # Update Pi and Python
-sudo apt-get update && sudo apt-get dist-upgrade
+sudo apt-get update && sudo apt-get dist-upgrade -y
 
-sudo apt-get install python3-pip
+sudo apt-get install python3-pip -y
 
 sudo pip3 install --upgrade setuptools
 
