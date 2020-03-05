@@ -164,6 +164,7 @@ logger.debug("init lora radio")
 
 # Configure LoRa Radio
 RADIO_FREQ = 915.0
+# TODO: limit this for the client? Or put in the .env file
 XMIT_DB = 23
 CS = DigitalInOut(board.CE1)
 RESET = DigitalInOut(board.D25)
