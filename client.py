@@ -186,6 +186,12 @@ def validate_preamble():
     return False
 
 
+def validate_time(ts1, ts2):
+    if abs(ts1 - ts2) > ALLOWABLE_TIME_ERROR:
+        return False
+    return True
+
+
 def log_unknown_packet():
     global prev_packet
     rlog_path = "/home/pi/1/raw/{}.dat".format(time.time())
@@ -252,8 +258,7 @@ def handle_packet_remote(recv_msg):
 
 def handle_packet_server(recv_msg):
     if recv_msg.type == messages_pb2.GrageDoorMessage.OPEN:
-        # TODO: TS check here
-        if recv_msg.ts > int(time.time()) + ALLOWABLE_TIME_ERROR:
+        if not validate_time(recv_msg.ts, int(time.time())):
             logger.warning("Packet failed time verification")
             ts_oob_msg = messages_pb2.GrageDoorMessage()
             ts_oob_msg.id = ID
