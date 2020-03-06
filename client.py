@@ -164,7 +164,7 @@ logger.debug("init lora radio")
 
 # Configure LoRa Radio
 RADIO_FREQ = 915.0
-XMIT_DB = round(os.getenv('QLIKR_XMIT_POWER'))
+XMIT_DB = int(os.getenv('QLIKR_XMIT_POWER'))
 if XMIT_DB > 23:
     XMIT_DB = 23
 if XMIT_DB < 1:

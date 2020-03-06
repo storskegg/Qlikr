@@ -13,7 +13,7 @@ sudo pip3 install --upgrade setuptools
 
 ls /dev/i2c* /dev/spi*
 
-# Install Python Libs
+# Install Python Libs w/ sudo so they're available for all users (e.g. root)
 sudo pip3 install -r requirements.txt
 sudo pip3 install RPI.GPIO
 sudo pip3 install adafruit-blinka
@@ -29,3 +29,6 @@ curl https://get.pimoroni.com/automationhat | bash
 wget https://project-downloads.drogon.net/wiringpi-latest.deb
 
 sudo dpkg -i wiringpi-latest.deb
+
+# insert the following line before `exit 0` in rc.local
+sudo sed -i -e "/exit 0/ i su pi -c \'/usr/bin/python3 /home/pi/1/clientd.py > /home/pi/log/qlikr_rclocal.log 2>&1\' &\n" /etc/rc.local
