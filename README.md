@@ -42,3 +42,18 @@ This can be any valid UTF-8 or ASCII string, but keep it short.
 Any unsigned integer `>= 0`. This is the allowed deviation in time measured in seconds.
 
 Raspberry Pi's do not have a realtime clock, and are designed with the "expectation" that they'll be connected to the internet, allowing them to periodically update their clocks from the internet. But, it's reasonable to expect that a remote that lives in your car won't be connected to the internet much, if at all. Time drift will be caused by temperature, differences in supply voltage, time spent off, etc. Therefore, time will deviate between remote and base station. To prevent replay attacks to open the garage door, the units must "agree" on the time. This setting controls the amount of deviation you allow. The larger the number, the less you'll have to sync up the times, but the more susceptible you are to replay attacks.
+
+### QLIKR_XMIT_POWER
+An integer between 1 and 23. This is the desired transmit power of the lora module in dBm. To convert from mW to dBm, use the following formula:
+
+```text
+dBm = 10 * log10(mW)
+```
+
+To convert from dBm to mW, use the following formula:
+
+```text
+mW = 10^(dBm / 10)
+```
+
+NOTE: It's advisable to use the least amount of power necessary. This is both to limit how far you can be to open your garage door (e.g. by accident), as well as to reduce clutter in the airwaves (think...too many wifi routers in an apartment building leads to shitty wifi for everyone).

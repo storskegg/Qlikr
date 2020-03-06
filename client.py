@@ -164,8 +164,11 @@ logger.debug("init lora radio")
 
 # Configure LoRa Radio
 RADIO_FREQ = 915.0
-# TODO: limit this for the client? Or put in the .env file
-XMIT_DB = 23
+XMIT_DB = round(os.getenv('QLIKR_XMIT_POWER'))
+if XMIT_DB > 23:
+    XMIT_DB = 23
+if XMIT_DB < 1:
+    XMIT_DB = 1
 CS = DigitalInOut(board.CE1)
 RESET = DigitalInOut(board.D25)
 spi = busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO)

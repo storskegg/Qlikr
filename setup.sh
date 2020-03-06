@@ -29,7 +29,3 @@ curl https://get.pimoroni.com/automationhat | bash
 wget https://project-downloads.drogon.net/wiringpi-latest.deb
 
 sudo dpkg -i wiringpi-latest.deb
-wget http://www.uugear.com/repo/Zero2GoOmini/installZero2Go.sh
-sudo sh installZero2Go.sh
-
-# sudo pip3 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 sudo pip3 install -U
