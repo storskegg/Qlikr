@@ -175,6 +175,7 @@ spi = busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO)
 rfm9x = adafruit_rfm9x.RFM9x(spi, CS, RESET, RADIO_FREQ)
 rfm9x.enable_crc = True
 rfm9x.tx_power = XMIT_DB
+
 packet = None
 prev_packet = None
 
@@ -182,9 +183,7 @@ logger.info("Output Power -- {} dB".format(XMIT_DB))
 logger.info("Listening on {} MHz".format(RADIO_FREQ))
 
 
-def validate_preamble():
-    global prev_packet
-    preamble = prev_packet[0:3]
+def validate_preamble(preamble):
     if preamble == PREAMBLE:
         return True
     return False
@@ -194,16 +193,6 @@ def validate_time(ts1, ts2):
     if abs(ts1 - ts2) > ALLOWABLE_TIME_ERROR:
         return False
     return True
-
-
-def log_unknown_packet():
-    global prev_packet
-    rlog_path = "/home/pi/1/raw/{}.dat".format(time.time())
-    with open(rlog_path, 'wb') as w:
-        logger.info("Packet is Unknown")
-        logger.info("Writing packet to {}".format(rlog_path))
-        w.write(prev_packet)
-        w.flush()
 
 
 # line is cardinal: 1-4
@@ -362,11 +351,16 @@ def run_client():
                 logger.info("Packet received -- RSSI: {} dB".format(rfm9x.rssi))
                 print_oled(2, "[Packet Received]")
                 prev_packet = packet
-                if validate_preamble():
+                if validate_preamble(prev_packet[0:3]):
                     logger.debug("Packet is Familiar")
                     handle_packet(prev_packet[3:])
                 else:
-                    log_unknown_packet()
+                    rlog_path = "/home/pi/1/raw/{}.dat".format(time.time())
+                    with open(rlog_path, 'wb') as w:
+                        logger.info("Packet is Unknown")
+                        logger.info("Writing packet to {}".format(rlog_path))
+                        w.write(prev_packet)
+                        w.flush()
                 time.sleep(1)
 
             if is_remote():
