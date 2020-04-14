@@ -226,7 +226,6 @@ def handle_packet_remote(recv_msg):
         if recv_msg.type == messages_pb2.GrageDoorMessage.RECVD:
             logger.debug("Packet Type: RECVD")
             if recv_msg.mac == last_sent_mac:
-                # draw.text((x, top + 24), "ACK", font=font, fill=255)
                 print_oled(4, "ACK")
                 logger.debug("RECV ACKs last sent packet")
             else:
@@ -235,7 +234,6 @@ def handle_packet_remote(recv_msg):
         elif recv_msg.type == messages_pb2.GrageDoorMessage.DENIED_OOB_TIME:
             logger.debug("Packet Type: DENIED_OOB_TIME")
             if recv_msg.mac == last_sent_mac:
-                # draw.text((x, top + 24), "DENIED: OOB TIME", font=font, fill=255)
                 print_oled(4, "DENIED: OOB TIME")
                 logger.warning("RECV DENIES last sent packet")
             else:
@@ -244,7 +242,6 @@ def handle_packet_remote(recv_msg):
         elif recv_msg.type == messages_pb2.GrageDoorMessage.DENIED_UNAUTH:
             logger.debug("Packet Type: DENIED_UNAUTH")
             if recv_msg.mac == last_sent_mac:
-                # draw.text((x, top + 24), "DENIED: UNAUTH", font=font, fill=255)
                 print_oled(4, "DENIED: UNAUTH")
                 logger.warning("RECV DENIES last sent packet")
             else:
@@ -253,7 +250,6 @@ def handle_packet_remote(recv_msg):
         elif recv_msg.type == messages_pb2.GrageDoorMessage.DENIED_OOB_GEOFENCE:
             logger.debug("Packet Type: DENIED_OOB_GEOFENCE")
             if recv_msg.mac == last_sent_mac:
-                # draw.text((x, top + 24), "DENIED: OOB GEO", font=font, fill=255)
                 print_oled(4, "DENIED: OOB GEO")
                 logger.warning("RECV DENIES last sent packet")
             else:
@@ -298,7 +294,6 @@ def handle_packet_server(recv_msg):
             resp_msg.ts = int(time.time())
             rfm9x.send(PREAMBLE + bytes(resp_msg.SerializeToString()))
             logger.info("RECVD response sent")
-            # draw.text((x, top + 24), "Sent ACK", font=font, fill=255)
         else:
             logger.warning("Packet failed digest verification")
             unauth_msg = messages_pb2.GrageDoorMessage()
@@ -309,7 +304,6 @@ def handle_packet_server(recv_msg):
             unauth_msg.ts = int(time.time())
             rfm9x.send(PREAMBLE + bytes(unauth_msg.SerializeToString()))
             logger.error("DENIED_UNAUTH response sent")
-            # draw.text(x, top + 24), "Sent UNAUTH", font=font, fill=255)
 
 
 def handle_packet(packet):
@@ -347,7 +341,6 @@ def send_open_message():
     rfm9x.send(button_a_data)
     logger.debug("{} bytes sent".format(len_data))
     print_oled(1, "OPEN")
-    # draw.text((x, top + 8), "OPEN", font=font, fill=255)
 
 
 def run_client():
@@ -357,20 +350,17 @@ def run_client():
     try:
         while True:
             packet = None
+            prev_packet = None
             blank_disp()
-            # draw a box to clear the image
-            # draw.text((x, top), "Qlikr - Listening", font=font, fill=255)
 
             # check for packet rx
             packet = rfm9x.receive()
             if packet is None:
-                # draw.text((x, top + 8), "[Waiting for Packet]", font=font, fill=255)
                 display.image(image)
                 display.show()
             else:
                 logger.info("Packet received -- RSSI: {} dB".format(rfm9x.rssi))
                 print_oled(2, "[Packet Received]")
-                # draw.text((x, top + 8), "[Packet Received]", font=font, fill=255)
                 prev_packet = packet
                 if validate_preamble():
                     logger.debug("Packet is Familiar")
@@ -378,6 +368,7 @@ def run_client():
                 else:
                     log_unknown_packet()
                 time.sleep(1)
+
             if is_remote():
                 if not btnA.value:
                     # Send Button A
