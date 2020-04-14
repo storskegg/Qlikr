@@ -222,7 +222,7 @@ def print_oled(line, text):
 
 def handle_packet_remote(recv_msg):
     if recv_msg.channel == CHANNEL:
-        logger.debug("Packet on correct channel")
+        logger.info("Packet on correct channel")
         if recv_msg.type == messages_pb2.GrageDoorMessage.RECVD:
             logger.debug("Packet Type: RECVD")
             if recv_msg.mac == last_sent_mac:
@@ -240,6 +240,7 @@ def handle_packet_remote(recv_msg):
                 logger.warning("RECV DENIES last sent packet")
             else:
                 logger.warning("RECV DENIES unknown or forgotten packet")
+
         elif recv_msg.type == messages_pb2.GrageDoorMessage.DENIED_UNAUTH:
             logger.debug("Packet Type: DENIED_UNAUTH")
             if recv_msg.mac == last_sent_mac:
@@ -248,6 +249,7 @@ def handle_packet_remote(recv_msg):
                 logger.warning("RECV DENIES last sent packet")
             else:
                 logger.warning("RECV DENIES unknown or forgotten packet")
+
         elif recv_msg.type == messages_pb2.GrageDoorMessage.DENIED_OOB_GEOFENCE:
             logger.debug("Packet Type: DENIED_OOB_GEOFENCE")
             if recv_msg.mac == last_sent_mac:
@@ -256,12 +258,14 @@ def handle_packet_remote(recv_msg):
                 logger.warning("RECV DENIES last sent packet")
             else:
                 logger.warning("RECV DENIES unknown or forgotten packet")
+
     else:
-        logger.debug("Packet on wrong channel; ignoring")
+        logger.info("Packet on wrong channel; ignoring")
 
 
 def handle_packet_server(recv_msg):
     if recv_msg.type == messages_pb2.GrageDoorMessage.OPEN:
+        logger.debug("Packet Type: OPEN")
         if not validate_time(recv_msg.ts, int(time.time())):
             logger.warning("Packet failed time verification")
             ts_oob_msg = messages_pb2.GrageDoorMessage()
@@ -274,7 +278,6 @@ def handle_packet_server(recv_msg):
             logger.warning("DENIED_OOB_TIME response sent")
             return
 
-        logger.debug("Packet Type: OPEN")
         nonce64 = codecs.encode(recv_msg.nonce, "base64")
         data = "{}\n{}\n{}\n{}\n{}\n{}\n".format(nonce64, recv_msg.ts, recv_msg.type, recv_msg.nmea, recv_msg.channel,
                                                  recv_msg.id)
