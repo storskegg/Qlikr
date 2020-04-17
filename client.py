@@ -34,7 +34,7 @@ from PIL import Image, ImageDraw, ImageFont
 import hmac
 import hashlib
 # from Crypto.Hash.SHA256 import SHA256Hash
-from Crypto.Random import get_random_bytes
+
 
 # Import Message Definition
 import messages_pb2
@@ -215,7 +215,7 @@ def handle_packet_remote(recv_msg):
         if recv_msg.type == messages_pb2.GrageDoorMessage.RECVD:
             logger.debug("Packet Type: RECVD")
             if recv_msg.mac == last_sent_mac:
-                print_oled(4, "ACK")
+                print_oled(3, "ACK")
                 logger.debug("RECV ACKs last sent packet")
             else:
                 logger.debug("RECV ACKs unknown or forgotten packet")
@@ -223,7 +223,7 @@ def handle_packet_remote(recv_msg):
         elif recv_msg.type == messages_pb2.GrageDoorMessage.DENIED_OOB_TIME:
             logger.debug("Packet Type: DENIED_OOB_TIME")
             if recv_msg.mac == last_sent_mac:
-                print_oled(4, "DENIED: OOB TIME")
+                print_oled(3, "DENIED: OOB TIME")
                 logger.warning("RECV DENIES last sent packet")
             else:
                 logger.warning("RECV DENIES unknown or forgotten packet")
@@ -231,7 +231,7 @@ def handle_packet_remote(recv_msg):
         elif recv_msg.type == messages_pb2.GrageDoorMessage.DENIED_UNAUTH:
             logger.debug("Packet Type: DENIED_UNAUTH")
             if recv_msg.mac == last_sent_mac:
-                print_oled(4, "DENIED: UNAUTH")
+                print_oled(3, "DENIED: UNAUTH")
                 logger.warning("RECV DENIES last sent packet")
             else:
                 logger.warning("RECV DENIES unknown or forgotten packet")
@@ -239,7 +239,7 @@ def handle_packet_remote(recv_msg):
         elif recv_msg.type == messages_pb2.GrageDoorMessage.DENIED_OOB_GEOFENCE:
             logger.debug("Packet Type: DENIED_OOB_GEOFENCE")
             if recv_msg.mac == last_sent_mac:
-                print_oled(4, "DENIED: OOB GEO")
+                print_oled(3, "DENIED: OOB GEO")
                 logger.warning("RECV DENIES last sent packet")
             else:
                 logger.warning("RECV DENIES unknown or forgotten packet")
@@ -310,7 +310,7 @@ def handle_packet(packet):
 def send_open_message():
     global last_sent_mac
     logger.debug('generating nonce')
-    nonce = get_random_bytes(16)
+    nonce = os.urandom(16)
     nonce64 = codecs.encode(nonce, "base64")
     logger.debug('building OPEN message')
     my_msg = messages_pb2.GrageDoorMessage()
@@ -349,7 +349,7 @@ def run_client():
                 display.show()
             else:
                 logger.info("Packet received -- RSSI: {} dB".format(rfm9x.rssi))
-                print_oled(2, "[Packet Received]")
+                print_oled(2, "[Packet Received]") # TODO: <-- here!
                 prev_packet = packet
                 if validate_preamble(prev_packet[0:3]):
                     logger.debug("Packet is Familiar")
