@@ -10,6 +10,9 @@ import time
 import codecs
 import logging
 import os
+import struct
+import smbus
+import sys
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -82,6 +85,25 @@ file_log_handler.setFormatter(formatter)
 stderr_log_handler.setFormatter(formatter)
 logger.setLevel('DEBUG')
 
+
+def readVoltage(bus):
+    "This function returns as float the voltage from the Raspi UPS Hat via the provided SMBus object"
+    address = 0x36
+    read = bus.read_word_data(address, 2)
+    swapped = struct.unpack("<H", struct.pack(">H", read))[0]
+    voltage = swapped * 1.25 / 1000 / 16
+    return voltage
+
+
+def readCapacity(bus):
+    "This function returns as a float the remaining capacity of the battery connected to the Raspi UPS Hat via the provided SMBus object"
+    address = 0x36
+    read = bus.read_word_data(address, 4)
+    swapped = struct.unpack("<H", struct.pack(">H", read))[0]
+    capacity = swapped / 256
+    return capacity
+
+
 logger.info("Initializing Hardware")
 
 if is_remote():
@@ -91,12 +113,12 @@ if is_remote():
     btnA.direction = Direction.INPUT
     btnA.pull = Pull.UP
 
-# logger.debug("init button B")
-# # Button B
-# btnB = DigitalInOut(board.D6)
-# btnB.direction = Direction.INPUT
-# btnB.pull = Pull.UP
-#
+    logger.debug("init button B")
+    # Button B
+    btnB = DigitalInOut(board.D6)
+    btnB.direction = Direction.INPUT
+    btnB.pull = Pull.UP
+
 # logger.debug("init button C")
 #
 # # Button C
@@ -108,6 +130,7 @@ logger.debug("init i2c interface")
 
 # Create the I2C interface.
 i2c = busio.I2C(board.SCL, board.SDA)
+battbus = smbus.SMBus(1)  # 0 = /dev/i2c-0 (port I2C0), 1 = /dev/i2c-1 (port I2C1)
 
 logger.debug("init oled display")
 
@@ -368,12 +391,22 @@ def run_client():
                     # Send Button A
                     logger.debug('open button pressed')
                     send_open_message()
-                # elif not btnB.value:
-                #     # Send Button B
-                #     display.fill(0)
-                #     button_b_data = bytes("Button B!\r\n", "utf-8")
-                #     rfm9x.send(button_b_data)
-                #     display.text('Sent Button B!', 25, 15, 1)
+
+                elif not btnB.value:
+                    # Send Button B
+                    logger.debug('batt button pressed')
+                    print_oled(2, "Voltage:%5.2fV" % readVoltage(battbus))
+                    logger.debug("Voltage:%5.2fV" % readVoltage(battbus))
+                    if readCapacity(battbus) == 100:
+                        logger.debug("Battery FULL")
+                        print_oled(3, "Battery FULL")
+                    elif readCapacity(battbus) < 20:
+                        logger.debug("Battery LOW")
+                        print_oled(3, "Battery LOW")
+                    else:
+                        logger.debug("Battery:%5i%%" % readCapacity(battbus))
+                        print_oled(3, "Battery:%5i%%" % readCapacity(battbus))
+
                 # elif not btnC.value:
                 #     # Send Button C
                 #     display.fill(0)
