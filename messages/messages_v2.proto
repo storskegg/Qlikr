@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package messages2;
+
+message HotpHmacCreds {
+    bytes nonce = 1;
+    bytes signature = 2;
+}
+
+message GarageDoorMessage {
+    string id = 1;
+    enum MessageType {
+        OPEN = 0;
+        RECVD = 1;
+        ACCEPTED = 10;
+        ACCEPTED_OPENING = 11;
+        ACCEPTED_CLOSING = 12;
+        DENIED = 40;
+        DENIED_UNAUTH = 41;
+        DENIED_REVOKED = 42;
+        DENIED_OOB_COUNT = 43;
+        DENIED_OOB_GEOFENCE = 44;
+    }
+    MessageType type = 2;
+    HotpHmacCreds creds = 3;
+    bytes nmea = 6;
+}
