@@ -378,12 +378,12 @@ def run_client():
                     logger.debug("Packet is Familiar")
                     handle_packet(prev_packet[3:])
                 else:
-                    rlog_path = "/home/pi/1/raw/{}.dat".format(time.time())
-                    with open(rlog_path, 'wb') as w:
-                        logger.info("Packet is Unknown")
-                        logger.info("Writing packet to {}".format(rlog_path))
-                        w.write(prev_packet)
-                        w.flush()
+                    logger.info("Packet is Unknown")
+                    # rlog_path = "/home/pi/1/raw/{}.dat".format(time.time())
+                    # with open(rlog_path, 'wb') as w:
+                    #     logger.info("Writing packet to {}".format(rlog_path))
+                    #     w.write(prev_packet)
+                    #     w.flush()
                 time.sleep(1)
 
             if is_remote():
