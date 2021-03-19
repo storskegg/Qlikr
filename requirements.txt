@@ -37,4 +37,4 @@ six==1.15.0
 spidev==3.5
 ssh-import-id==5.10
 sysv-ipc==1.0.1
-urllib3==1.26.2
+urllib3==1.26.3
