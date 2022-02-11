@@ -22,7 +22,7 @@ keyring==21.5.0
 keyrings.alt==4.0.1
 olefile==0.46
 Pillow==8.2.0
-protobuf==3.14.0
+protobuf==3.15.0
 pyftdi==0.52.0
 PyGObject==3.38.0
 pyserial==3.5
