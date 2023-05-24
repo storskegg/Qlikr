@@ -29,7 +29,7 @@ pyserial==3.5
 python-apt==0.7.8
 pyusb==1.1.0
 pyxdg==0.27
-requests==2.25.0
+requests==2.31.0
 rpi-ws281x==4.2.5
 RPi.GPIO==0.7.0
 SecretStorage==3.3.0
