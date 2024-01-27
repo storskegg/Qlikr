@@ -11,7 +11,7 @@ asn1crypto==1.4.0
 certifi==2020.11.8
 chardet==3.0.4
 colorzero==1.1
-cryptography==3.3.2
+cryptography==42.0.0
 entrypoints==0.3
 gpiozero==1.5.1
 grpcio-reflection==1.33.2
