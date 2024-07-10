@@ -38,3 +38,4 @@ spidev==3.5
 ssh-import-id==5.10
 sysv-ipc==1.0.1
 urllib3==1.26.5
+zipp>=3.19.1 # not directly required, pinned by Snyk to avoid a vulnerability
